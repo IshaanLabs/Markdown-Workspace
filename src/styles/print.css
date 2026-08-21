@@ -1,0 +1,340 @@
+/**
+ * Print / PDF theme for Markdown Workspace.
+ * Triggered via browser print dialog (Save as PDF). No third-party conversion,
+ * no watermark. Margin boxes work best in Firefox; Chrome still gets clean body
+ * pagination and a polished title page.
+ */
+
+.print-root {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 22mm 18mm 24mm;
+
+    @top-left {
+      content: string(doc-title);
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      font-size: 8.5pt;
+      color: #64748b;
+      vertical-align: bottom;
+      padding-bottom: 4mm;
+      border-bottom: 0.4pt solid #e2e8f0;
+      width: 100%;
+    }
+
+    @top-right {
+      content: "";
+    }
+
+    @bottom-center {
+      content: counter(page);
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      font-size: 9pt;
+      color: #64748b;
+      vertical-align: top;
+      padding-top: 5mm;
+    }
+  }
+
+  /* Title page: no running header / page number */
+  @page title {
+    margin: 28mm 18mm 28mm;
+
+    @top-left {
+      content: none;
+      border: 0;
+    }
+
+    @bottom-center {
+      content: none;
+    }
+  }
+
+  html,
+  body,
+  #root {
+    height: auto !important;
+    min-height: 0 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  /* Hide app chrome; reveal only the print document */
+  body * {
+    visibility: hidden !important;
+  }
+
+  .print-root,
+  .print-root * {
+    visibility: visible !important;
+  }
+
+  .print-root {
+    display: block !important;
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    color: #0f172a;
+    font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: 11pt;
+    line-height: 1.65;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ——— Title page ——— */
+  .print-title-page {
+    page: title;
+    page-break-after: always;
+    break-after: page;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 78vh;
+    padding: 8mm 0;
+  }
+
+  .print-title-rule {
+    width: 28mm;
+    height: 2.5pt;
+    background: #0f766e;
+    margin: 0 0 10mm;
+  }
+
+  .print-title-rule-bottom {
+    margin: 12mm 0 0;
+    width: 14mm;
+    height: 1pt;
+    background: #cbd5e1;
+  }
+
+  .print-title {
+    font-size: 32pt;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+    color: #0f172a;
+    margin: 0 0 8mm;
+    max-width: 140mm;
+    string-set: doc-title content();
+  }
+
+  .print-meta {
+    margin: 0;
+    font-size: 10.5pt;
+    color: #64748b;
+    letter-spacing: 0.01em;
+  }
+
+  /* ——— Body ——— */
+  .print-body {
+    font-size: 11pt;
+    color: #1e293b;
+  }
+
+  .print-body > :first-child {
+    margin-top: 0;
+  }
+
+  .print-body h1,
+  .print-body h2,
+  .print-body h3,
+  .print-body h4,
+  .print-body h5,
+  .print-body h6 {
+    color: #0f172a;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    break-after: avoid;
+    page-break-after: avoid;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Keep heading with following paragraph / list */
+  .print-body h1,
+  .print-body h2,
+  .print-body h3,
+  .print-body h4,
+  .print-body h5,
+  .print-body h6 {
+    margin-top: 1.35em;
+    margin-bottom: 0.45em;
+  }
+
+  .print-body h1 + *,
+  .print-body h2 + *,
+  .print-body h3 + *,
+  .print-body h4 + *,
+  .print-body h5 + *,
+  .print-body h6 + * {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+
+  .print-body h1 {
+    font-size: 20pt;
+    padding-bottom: 0.25em;
+    border-bottom: 0.6pt solid #e2e8f0;
+  }
+
+  .print-body h2 {
+    font-size: 14.5pt;
+  }
+
+  .print-body h3 {
+    font-size: 12.5pt;
+  }
+
+  .print-body h4,
+  .print-body h5,
+  .print-body h6 {
+    font-size: 11pt;
+  }
+
+  .print-body p,
+  .print-body ul,
+  .print-body ol,
+  .print-body blockquote,
+  .print-body pre,
+  .print-body table,
+  .print-body hr {
+    orphans: 3;
+    widows: 3;
+  }
+
+  .print-body p {
+    margin: 0.7em 0;
+  }
+
+  .print-body ul,
+  .print-body ol {
+    margin: 0.7em 0;
+    padding-left: 1.35em;
+  }
+
+  .print-body ul {
+    list-style-type: disc;
+  }
+
+  .print-body ol {
+    list-style-type: decimal;
+  }
+
+  .print-body li + li {
+    margin-top: 0.2em;
+  }
+
+  .print-body ul.contains-task-list {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .print-body .task-list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4em;
+    list-style: none;
+  }
+
+  .print-body a {
+    color: #0f766e;
+    text-decoration: none;
+    border-bottom: 0.4pt solid #99f6e4;
+  }
+
+  .print-body code {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+    background: #f1f5f9;
+    padding: 0.05em 0.3em;
+    border-radius: 0.2em;
+  }
+
+  .print-body pre {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    border: 0.6pt solid #e2e8f0;
+    border-radius: 0;
+    padding: 0.85em 1em;
+    overflow: visible;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 1em 0;
+  }
+
+  .print-body pre code {
+    background: transparent;
+    padding: 0;
+    font-size: 0.86em;
+  }
+
+  .print-body blockquote {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin: 1em 0;
+    padding: 0.35em 0 0.35em 1em;
+    border-left: 2.5pt solid #0f766e;
+    color: #334155;
+    background: #f8fafc;
+  }
+
+  .print-body table {
+    width: 100%;
+    border-collapse: collapse;
+    break-inside: auto;
+    page-break-inside: auto;
+    margin: 1em 0;
+    font-size: 10pt;
+  }
+
+  .print-body thead {
+    display: table-header-group;
+  }
+
+  .print-body tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-body th,
+  .print-body td {
+    border: 0.6pt solid #cbd5e1;
+    padding: 0.4em 0.55em;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .print-body th {
+    background: #f1f5f9 !important;
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  .print-body hr {
+    border: 0;
+    border-top: 0.6pt solid #e2e8f0;
+    margin: 1.6em 0;
+  }
+
+  .print-body img {
+    max-width: 100%;
+    height: auto;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-body input[type="checkbox"] {
+    accent-color: #0f766e;
+  }
+}

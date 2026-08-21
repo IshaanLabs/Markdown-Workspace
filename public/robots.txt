@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ishaanlabs.github.io/Markdown-Workspace/sitemap.xml
